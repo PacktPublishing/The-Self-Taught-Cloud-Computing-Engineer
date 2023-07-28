@@ -1,0 +1,13 @@
+create database test;
+
+CREATE TABLE test.students (
+    StudentID int,
+    LastName varchar(100),
+    FirstName varchar(100),
+    City varchar(100)
+);
+
+INSERT INTO test.students values (101, "Smith", "John", "Houston");
+INSERT INTO test.students values (102, "Smith", "Jim", "Plano");
+INSERT INTO test.students values (201, "Armstrong", "Neil", "Dallas");
+INSERT INTO test.students values (202, "Smith", "Neil", "Dallas");
