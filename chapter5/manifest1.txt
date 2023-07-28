@@ -1,0 +1,15 @@
+{
+    "fileLocations": [
+        {
+            "URIs": [
+                "s3://2023-0308-firehose-output/2023/03/09/05/Stream-Firehose-S3-1-2023-03-09-05-14-56-2bf6ad5e-064a-425e-8688-bfec224f731d"
+            ]
+        },
+    ],
+    "globalUploadSettings": {
+        "format": "JSON",
+        "delimiter": ",",
+        "textqualifier": "'",
+        "containsHeader": "true"
+    }
+}

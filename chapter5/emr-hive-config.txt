@@ -1,0 +1,5 @@
+s3://us-east-1.elasticmapreduce.samples/cloudfront/code/Hive_CloudFront.q
+
+s3://us-east-1.elasticmapreduce.samples
+
+s3://emr20230308/hive/target

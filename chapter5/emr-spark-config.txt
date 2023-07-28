@@ -1,0 +1,2 @@
+--data_source s3://emr20230308/source/food_inspection_data.csv
+--output_target s3://emr20230308/target	
