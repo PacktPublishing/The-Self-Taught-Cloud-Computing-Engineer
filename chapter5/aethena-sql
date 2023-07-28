@@ -1,0 +1,6 @@
+CREATE table salesdb.region
+WITH (
+  format='PARQUET', external_location='s3://glue030620231/target/'
+) AS SELECT * FROM source
+where region = 'Europe';
+
