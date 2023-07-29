@@ -1,0 +1,27 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:GetBucketPolicy"
+ 		    "s3:ListAllMyBuckets"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+
+	  {
+            "Action": [
+                "s3:GetObject",
+                "s3:ListObjects",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::03252023-bucket1",
+                "arn:aws:s3:::03252023-bucket1/*"
+            ],
+            "Effect": "Allow"
+        }
+
+    ]
+}

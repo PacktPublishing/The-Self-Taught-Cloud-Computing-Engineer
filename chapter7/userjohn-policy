@@ -1,0 +1,28 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "iam:Describe*",
+                "iam:GetAccountAuthorizationDetails",
+                "iam:GetPolicy",
+                "iam:GetRole",
+                "iam:GetRolePolicy",
+                "iam:GetUser",
+                "iam:GetUserPolicy",
+                "iam:List*",
+                "logs:Desc*",
+                "logs:Get*",
+                "logs:List*",
+                "s3:ListAllMyBuckets",
+                "s3:ListBucket",
+                "s3:PutAccountPublicAccessBlock",
+                "s3:PutBucketOwnershipControls",
+                "s3:PutBucketPublicAccessBlock",
+                "sts:AssumeRole"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
