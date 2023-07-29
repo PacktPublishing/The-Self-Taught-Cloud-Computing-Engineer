@@ -1,0 +1,48 @@
+1. List the created projects 
+gcloud projects list
+
+2. Create the VPC and subnets.
+gcloud compute networks create vpc1 --project project1 --subnet-mode=custom
+gcloud compute networks subnets create subnet1 --network=vpc1 --range=10.10.1.0/24 --project project1 --region us-west1
+gcloud compute networks subnets create subnet2 --network=vpc1 --range=10.10.2.0/24 --project project1 --region us-east1
+gcloud compute networks create vpc2 --project project1 --subnetmode=custom
+gcloud compute networks subnets create subnet3 --network=vpc2 --range=192.168.1.0/24 --project project1 --region us-central1
+gcloud compute networks create vpc3 --project project2 --subnet-mode=custom
+gcloud compute networks subnets create subnet4 --network=vpc3 --range=172.16.1.0/24 --project project2 --region us-central1
+gcloud projects list
+
+3. Create VMs in the VPC/subnets and record their information:
+gcloud compute instances create vm-1 --project project1 --machine-type=f1-micro --zone=us-west1-a --subnet=subnet1
+gcloud compute instances create vm-2 --project project1 --machine-type=f1-micro --network-interface=subnet=subnet2,noaddress --zone=us-east1-b
+gcloud compute instances create vm-3 --project project1 --machine-type=f1-micro --network-interface=subnet=subnet3,noaddress --zone=us-central1-b
+gcloud compute instances create vm-4 --project project2 --machine-type=f1-micro --network-interface=subnet=subnet4,noaddress --zone=us-central1-b
+gcloud compute instances list --project project1
+gcloud compute instances list --project project2
+
+4. Open a firewall for vpc1:
+gcloud compute firewall-rules create fw1 --network vpc1 --allow tcp:22,icmp --source-ranges 0.0.0.0/0 --project project1
+
+I. Peering vpc1 and vpc2 (in the same project) and open a firewall for vpc2:
+gcloud compute networks peerings create peer12 --project=project1 --network=vpc1 --peer-project=project1 --peer-network=vpc2
+gcloud compute networks peerings create peer21 --peerproject=project1 --network=vpc2 --project=project1 --peernetwork=vpc1
+gcloud compute networks peerings list --project=project1
+gcloud compute firewall-rules create fw2 --network vpc2 --allow tcp:22,icmp --source-ranges 0.0.0.0/0 --project project1
+
+II. Peering vpc1 and vpc3 (in a different project) and open a firewall for vpc3:
+gcloud compute networks peerings create peer13 --project=project1 --network=vpc1 --peer-project=project2 --peer-network=vpc3
+gcloud compute networks peerings create peer31 --project=project2 --network=vpc3 --peer-project=project1 --peer-network=vpc1
+gcloud compute networks peerings list --project=project1
+gcloud compute firewall-rules create fw3 --network vpc3 --allow tcp:22,icmp --source-ranges 10.10.1.0/24 --project project2
+
+5. Clean up the cloud resources we have provisioned.
+I. Clean VPC peering:
+gcloud compute networks peerings delete peer13 --project=project1 --network=vpc1
+gcloud compute networks peerings delete peer31 --project=project2 --network=vpc3
+gcloud compute networks peerings delete peer12 --project=project1 --network=vpc1
+gcloud compute networks peerings delete peer21 --project=project1 --network=vpc2
+
+II. Clean the VMs:
+gcloud compute instances delete vm-1 --project project1
+gcloud compute instances delete vm-2 --project project1
+gcloud compute instances delete vm-3 --project project1
+gcloud compute instances delete vm-4 --project project2

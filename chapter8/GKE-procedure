@@ -1,0 +1,43 @@
+1. Clone the source code from GitHub:
+
+git clone https://github.com/PacktPublishing/Self-Taught-Cloud-computing-Engineer/chapter8/GKE/
+
+Change the directory to gke-lab-01 and list the files in the directory:
+cd GCP/gke-lab-01; ls
+
+2. Containerize the application – build the Docker image and push it to Google Container Registry (GCR):
+docker build -t gcr.io/$DEVSHELL_PROJECT_ID/webserver1 .
+docker images
+docker push gcr.io/$DEVSHELL_PROJECT_ID/webserver1
+
+3.Create a two-node GKE cluster and deploy the containerized webserver1:
+	I. Set up the environment:
+	gcloud config set compute/zone us-central1-a
+	gcloud services enable container.googleapis.com
+	II. Create the GKE cluster:
+	gcloud container clusters create hello-cluster --num-nodes=2
+	III. Deploy the container application (webserver1) to listen on port 80:
+	kubectl create deployment hello-web --image=gcr.io/$DEVSHELL_PROJECT_ID/webserver1 --port 80
+	kubectl get deployments hello-web
+	IV.Check out our Pods on the nodes:
+	kubectl get pods
+
+4. Create a load balancer and expose the service to the internet:
+	I. Create a load balancer and expose the application to the internet on port 8080:
+	kubectl expose deployment hello-web --type=LoadBalancer --port 8080 --target-port 80
+
+5. Find the load balancer’s public IP address and port:
+	kubectl get service will return information about the service (Webserver).
+	Open a new browser to access the service/web server (https://34.67.173.248:8080 in our case).
+
+6. Set up autoscaling for the cluster pods and nodes now:
+	I. Set up autoscaling for the application – PODs  Pods:
+	kubectl autoscale deployment hello-la --max 6 --min 4 --cpu-percent 50
+	II. Enable autoscaling for the cluster nodes:
+	gcloud container clusters update hello-cluster --enable-autoscaling --min-nodes 2 --max-nodes 8
+
+7. Clean up  the resources we have provisioned earlier:
+	I. Delete the GKE cluster:
+	gcloud container clusters delete hello-cluster
+	II. Delete the container images in GCR:
+	gcloud container images delete gcr.io/$DEVSHELL_PROJECT_ID/webserver1
